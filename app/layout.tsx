@@ -1,39 +1,50 @@
-import Head from "next/head";
+import { Inter } from "next/font/google";
+import "../globals.css";
+import Providers from "./components/Providers";
+
+const inter = Inter({ subsets: ["latin"] });
+
+const description = "The Gift Tracker Home Page. Where everything takes place!";
+const title = "Gift Tracker | Home";
 
 export const metadata = {
-  title: "Gift Tracker | Home",
-  description: "The Gift Tracker Home Page. Where everything takes place!",
+  title,
+  description,
+  creator: "Yastu",
+  authors: [{ name: "DevYatsu" }],
+  referrer: "origin-when-cross-origin",
+  alternates: {
+    canonical: "/",
+    languages: {
+      "en-US": "/",
+    },
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    description,
+    title,
+    robots: "index, follow",
+    siteName: "Gift Tracker",
+  },
+  locale: "en_US",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
-    <html lang="en">
-      <Head>
-        <meta name="robots" content="index, follow" />
-        <meta property="og:title" content={metadata.title} />
-        <meta property="og:description" content={metadata.description} />
-        <meta property="og:type" content="website" />
-        {/* <meta property="og:url" content="https://yourwebsite.com" /> */}
-        {/* <meta
-          property="og:image"
-          content="https://yourwebsite.com/your-image.jpg"
-        /> */}
-        {/* <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={metadata.title} />
-        <meta name="twitter:description" content={metadata.description} />
-        <meta
-          name="twitter:image"
-          content="https://yourwebsite.com/your-image.jpg"
-        /> */}
-        {/* <link rel="canonical" href="https://yourwebsite.com" /> */}
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        {/* <link rel="stylesheet" href="https://yourwebsite.com/styles.css" /> */}
-      </Head>
-      <body>{children}</body>
+    <html lang="en" className="h-full w-full">
+      <body
+        className={`${inter.className} h-full w-full flex justify-center items-center`}
+      >
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }
