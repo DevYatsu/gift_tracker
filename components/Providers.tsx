@@ -4,6 +4,7 @@ import { useState } from "react";
 import { NextUIProvider } from "@nextui-org/react";
 import { SessionProvider } from "next-auth/react";
 import { Session } from "next-auth";
+import { ThemeProvider as NextThemesProvider } from "next-themes";
 
 export default function Providers({
   children,
@@ -18,7 +19,11 @@ export default function Providers({
     <>
       <QueryClientProvider client={client}>
         <SessionProvider session={authSession}>
-          <NextUIProvider>{children}</NextUIProvider>
+          <NextUIProvider>
+            <NextThemesProvider attribute="class" defaultTheme="light">
+              {children}
+            </NextThemesProvider>
+          </NextUIProvider>
         </SessionProvider>
       </QueryClientProvider>
     </>

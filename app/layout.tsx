@@ -45,7 +45,7 @@ export default async function RootLayout({
   return (
     <html lang="en" className="h-full w-full">
       <body
-        className={`${inter.className} h-full w-full bg-background text-foreground`}
+        className={`${inter.className} min-h-screen h-full w-full bg-background text-foreground`}
       >
         <Providers authSession={authSession}>{children}</Providers>
       </body>

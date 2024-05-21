@@ -18,7 +18,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div>
+    <div className="flex justify-center">
       <Button
         startContent={<GoogleImage />}
         className="bg-gradient-to-tr from-blue-500 to-green-500 text-white shadow-lg"

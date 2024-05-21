@@ -8,8 +8,8 @@ export default function LoginLayout({
   return (
     <>
       <NavBar />
-      <div className="container pt-5">
-        <div className="flex justify-center items-center">{children}</div>
+      <div className="w-full h-full flex justify-center">
+        <div className="container">{children}</div>
       </div>
     </>
   );
