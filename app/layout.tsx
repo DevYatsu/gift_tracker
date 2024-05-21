@@ -2,6 +2,7 @@ import { Inter } from "next/font/google";
 import "../globals.css";
 import Providers from "@/components/Providers";
 import { getAuth } from "@/auth";
+import NavBar from "../components/NavBar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -44,7 +45,7 @@ export default async function RootLayout({
   return (
     <html lang="en" className="h-full w-full">
       <body
-        className={`${inter.className} h-full w-full flex justify-center items-center`}
+        className={`${inter.className} h-full w-full bg-background text-foreground`}
       >
         <Providers authSession={authSession}>{children}</Providers>
       </body>
