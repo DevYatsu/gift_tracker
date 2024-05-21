@@ -7,17 +7,17 @@ import { Session } from "next-auth";
 
 export default function Providers({
   children,
-  session,
+  authSession,
 }: {
   children: React.ReactNode;
-  session: Session;
+  authSession: Session | null;
 }) {
   const [client] = useState(new QueryClient());
 
   return (
     <>
       <QueryClientProvider client={client}>
-        <SessionProvider session={session}>
+        <SessionProvider session={authSession}>
           <NextUIProvider>{children}</NextUIProvider>
         </SessionProvider>
       </QueryClientProvider>

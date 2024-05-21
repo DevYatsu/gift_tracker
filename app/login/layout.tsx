@@ -5,3 +5,4 @@ export default function LoginLayout({
 }) {
   return <div className="container">{children}</div>;
 }
+ 

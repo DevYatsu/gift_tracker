@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
 import "../globals.css";
 import Providers from "./components/Providers";
+import { getAuth } from "./api/auth/[...nextauth]/route";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -33,17 +34,19 @@ export const metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const authSession = await getAuth();
+
   return (
     <html lang="en" className="h-full w-full">
       <body
         className={`${inter.className} h-full w-full flex justify-center items-center`}
       >
-        <Providers>{children}</Providers>
+        <Providers authSession={authSession}>{children}</Providers>
       </body>
     </html>
   );
