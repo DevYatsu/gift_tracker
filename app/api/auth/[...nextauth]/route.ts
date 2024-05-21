@@ -1,20 +1,5 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import NextAuth, { getServerSession } from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
-
-export const authOptions = {
-  providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    }),
-  ],
-  pages: {
-    login: "/login",
-  },
-};
+import { authOptions } from "@/auth";
+import NextAuth from "next-auth";
 
 const handler = NextAuth(authOptions);
-export const getAuth = () => getServerSession(authOptions);
-
 export { handler as GET, handler as POST };
