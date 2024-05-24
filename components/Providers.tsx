@@ -19,11 +19,11 @@ export default function Providers({
     <>
       <QueryClientProvider client={client}>
         <SessionProvider session={authSession}>
-          <NextUIProvider>
-            <NextThemesProvider attribute="class" defaultTheme="light">
+          <NextThemesProvider attribute="class" defaultTheme="light">
+            <NextUIProvider className="min-h-screen h-full w-full">
               {children}
-            </NextThemesProvider>
-          </NextUIProvider>
+            </NextUIProvider>
+          </NextThemesProvider>
         </SessionProvider>
       </QueryClientProvider>
     </>

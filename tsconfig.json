@@ -27,6 +27,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "app/api/auth/[...nextauth]/route.ts"
-, "components/Theme/MoonIcon.jsx"  ],
+, "components/Theme/MoonIcon.jsx", "components/Icon/ImgIcon.tsx"  ],
   "exclude": ["node_modules"]
 }

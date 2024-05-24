@@ -24,7 +24,7 @@ export default function NavBar() {
         <Image src="/icon.png" height="30" width="30" alt="Gift Tracker LOGO" />
         <p className="font-bold text-inherit pl-2">Gift Tracker</p>
       </NavbarBrand>
-      <NavbarContent className="hidden sm:flex gap-4" justify="center">
+      {/* <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarItem isActive={pathname === "/"}>
           <Link
             color={pathname === "/" ? "primary" : "foreground"}
@@ -43,7 +43,7 @@ export default function NavBar() {
             Item (todo!)
           </Link>
         </NavbarItem>
-      </NavbarContent>
+      </NavbarContent> */}
       <NavbarContent justify="end">
         {session ? (
           <>

@@ -11,7 +11,7 @@ export default function LogOutButton() {
       color="danger"
       href="/login"
       variant="flat"
-      onClick={() => {
+      onPress={() => {
         signOut();
       }}
     >

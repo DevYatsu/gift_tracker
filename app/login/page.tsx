@@ -1,5 +1,4 @@
 "use client";
-
 import { Button } from "@nextui-org/button";
 import GoogleSvg from "../../public/google_icon.svg";
 import Image from "next/image";
@@ -18,13 +17,13 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center items-center h-full">
       <Button
         startContent={<GoogleImage />}
         className="bg-gradient-to-tr from-blue-500 to-green-500 text-white shadow-lg"
         type="submit"
         onClick={() => {
-          signIn("google");
+          signIn("google", { callbackUrl: "/" });
         }}
       >
         Login With Google
