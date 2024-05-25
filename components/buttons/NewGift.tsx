@@ -29,7 +29,7 @@ const giftSchema = z.object({
   createdTimestamp: z.number().int(),
   lastUpdatedTimestamp: z.number().nullable(),
   updatesIds: z.number().int().array(),
-  imageUrl: z.string(),
+  imageUrl: z.string().nullable(),
 });
 
 type giftSchemaCheck = Partial<z.infer<typeof giftSchema>>;
@@ -37,11 +37,11 @@ type giftSchemaCheck = Partial<z.infer<typeof giftSchema>>;
 export default function NewGiftButton() {
   const { data: session } = useSession();
 
-  const [errors, setErrors] = useState({} as giftSchemaCheck);
-
   if (!session || !session.user || !session.user.email) {
     redirect("/login");
   }
+
+  const [errors, setErrors] = useState({} as giftSchemaCheck);
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
@@ -62,10 +62,12 @@ export default function NewGiftButton() {
               action={async (formData) => {
                 setErrors({});
 
+                const img = (formData.get("imageUrl") as string).trim();
+
                 const gift = {
                   name: formData.get("name") as string,
                   description: formData.get("description") as string,
-                  imageUrl: formData.get("imageUrl") as string,
+                  imageUrl: img === "" ? null : img,
                   recipient: formData.get("recipient") as string,
                   currency: formData.get("currency") as string,
                   price: parseInt(formData.get("price") as string),
@@ -111,7 +113,6 @@ export default function NewGiftButton() {
                   }}
                 />
                 <Input
-                  autoFocus
                   label="Name"
                   variant="bordered"
                   labelPlacement="outside"
@@ -179,7 +180,6 @@ export default function NewGiftButton() {
                   }}
                 />
                 <Input
-                  autoFocus
                   label="Image URL"
                   variant="bordered"
                   labelPlacement="outside"

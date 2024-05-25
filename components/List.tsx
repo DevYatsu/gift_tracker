@@ -1,9 +1,11 @@
-import { Avatar, Badge, Button } from "@nextui-org/react";
+import { Avatar, Badge } from "@nextui-org/react";
 import ImgIcon from "./Icon/ImgIcon";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import { redirect } from "next/navigation";
-import { GiftType } from "@/db/schema";
+import { GiftType, GiftUpdateType } from "@/db/schema";
+import GiftInformationModal from "./GiftModal";
+import { getUpdatesFromIds } from "@/db/interactions";
 
 export default async function GiftsList({ gifts }: { gifts: GiftType[] }) {
   const session = await getServerSession(authOptions);
@@ -15,19 +17,30 @@ export default async function GiftsList({ gifts }: { gifts: GiftType[] }) {
   return (
     <ul role="list" className="divide-y divide-gray-100 mx-4">
       {gifts.map((gift) => (
-        <Gift gift={gift} key={gift._id.toString()} />
+        <Gift gift={gift} key={gift._id} />
       ))}
     </ul>
   );
 }
 
-function Gift({ gift }: { gift: GiftType }) {
+async function Gift({ gift }: { gift: GiftType }) {
   const createdDate = new Date(gift.createdTimestamp);
   const updatedDate = gift.lastUpdatedTimestamp
     ? new Date(gift.lastUpdatedTimestamp)
     : null;
 
-  const price = gift.price.toString();
+  const updates = (await getUpdatesFromIds(gift.updatesIds))
+    .filter((update) => update)
+    .map((dbUpdate) => {
+      const update = dbUpdate as Record<string, any>;
+      console.log(dbUpdate);
+
+      update.by = dbUpdate.by;
+      update.amount = dbUpdate.amount.toString();
+      update._id = dbUpdate._id.toString();
+
+      return update as GiftUpdateType;
+    });
 
   return (
     <li className="flex justify-between items-center gap-x-6 py-5 relative">
@@ -42,7 +55,7 @@ function Gift({ gift }: { gift: GiftType }) {
             isBordered
             fallback={<ImgIcon className="h-12 w-12" />}
             className="h-24 w-24 sm:h-28 sm:w-28 bg-gray-50"
-            src={gift.imageUrl}
+            src={gift.imageUrl ?? undefined}
             alt={gift.name}
             radius="full"
           />
@@ -65,13 +78,13 @@ function Gift({ gift }: { gift: GiftType }) {
         >
           For {gift.recipient}{" "}
         </span>
-        | {price} {gift.currency}
+        | {gift.price} {gift.currency}
         {gift.paidAmount === gift.price ? "success" : "warning"}
       </p>
 
       <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
         <p className="text-sm leading-6 text-foreground">
-          {price} {gift.currency}
+          {gift.price} {gift.currency}
         </p>
         <p className="mt-1 text-xs leading-5 text-gray-500">
           {updatedDate ? `Updated ${updatedDate.toLocaleString()} | ` : ""}
@@ -91,6 +104,8 @@ function Gift({ gift }: { gift: GiftType }) {
           </div>
         )} */}
       </div>
+
+      <GiftInformationModal gift={gift} updates={updates} />
     </li>
   );
 }

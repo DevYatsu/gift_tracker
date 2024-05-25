@@ -2,10 +2,11 @@ import { authOptions } from "@/auth";
 import NewGiftButton from "@/components/buttons/NewGift";
 import List from "@/components/List";
 import NavBar from "@/components/NavBar";
-import { GiftType } from "@/db/schema";
+import { DbGift, GiftType, GiftUpdateType } from "@/db/schema";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import { findUserGifts } from "@/db/interactions";
+import { findUserGifts, getUpdatesFromIds } from "@/db/interactions";
+import { ObjectId } from "mongodb";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
@@ -14,9 +15,7 @@ export default async function Home() {
     redirect("/login");
   }
 
-  const gifts = (await findUserGifts(
-    session.user.email ?? ""
-  )) as unknown as GiftType[];
+  const gifts = await fetchGifts(session.user.email);
 
   return (
     <>
@@ -31,4 +30,22 @@ export default async function Home() {
     </>
   );
 }
-//
+
+async function fetchGifts(email?: string | null) {
+  const dbGifts = (await findUserGifts(email ?? "")) as unknown as DbGift[];
+
+  const gifts = dbGifts.map((dbGift) => {
+    const gift = dbGift as Record<string, any>;
+
+    gift.price = gift.price.toString();
+    gift.paidAmount = gift.paidAmount.toString();
+    gift._id = gift._id.toString();
+    gift.updatesIds = gift.updatesIds.map((objectId: ObjectId) =>
+      objectId.toString()
+    );
+
+    return gift as GiftType;
+  }) as unknown as GiftType[];
+
+  return gifts;
+}
