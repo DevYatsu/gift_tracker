@@ -6,7 +6,19 @@ if (!uri) {
   throw new Error("Add Mongo URI to .env.local");
 }
 
-const client = new MongoClient(uri, {});
-const clientPromise = client.connect();
+let cachedClient: MongoClient | null = null;
+let cachedPromise: Promise<MongoClient> | null = null;
+
+async function getClient() {
+  if (cachedClient && cachedPromise) {
+    return cachedPromise;
+  }
+
+  cachedClient = new MongoClient(uri!, {});
+  cachedPromise = cachedClient.connect();
+  return cachedPromise;
+}
+
+const clientPromise = getClient();
 
 export default clientPromise;
