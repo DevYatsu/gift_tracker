@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "@nextui-org/button";
+import { Button } from "@nextui-org/react";
 import GoogleSvg from "../../public/google_icon.svg";
 import Image from "next/image";
 import { signIn, useSession } from "next-auth/react";
