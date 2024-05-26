@@ -21,8 +21,6 @@ export type GiftType = {
   recipient: string;
 
   price: string; // converted to Decimal128 before sent to db
-  paidAmount: string; // converted to Decimal128 before sent to db
-
   currency: string;
 
   description: string;
@@ -36,6 +34,5 @@ export type GiftType = {
 
 export type DbGift = Omit<GiftType, "price" | "paidAmount" | "_id"> & {
   price: Decimal128;
-  paidAmount: Decimal128;
   _id: ObjectId;
 };

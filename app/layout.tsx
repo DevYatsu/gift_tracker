@@ -11,7 +11,7 @@ const title = "Gift Tracker | Home";
 export const metadata = {
   title,
   description,
-  creator: "Yastu",
+  creator: "Yatsu",
   authors: [{ name: "DevYatsu" }],
   referrer: "origin-when-cross-origin",
   alternates: {

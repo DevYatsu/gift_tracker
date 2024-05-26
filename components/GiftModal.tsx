@@ -23,8 +23,8 @@ import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { PropsWithChildren, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { addGiftUpdate, deleteGift } from "@/db/interactions";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 const UpdateSchema = z.object({
   by: z.string().min(2),
@@ -37,10 +37,10 @@ type updateSchemaCheck = Partial<z.infer<typeof UpdateSchema>>;
 
 export default function GiftInformationModal({
   gift,
-  updates,
+  initialUpdates,
 }: {
   gift: GiftType;
-  updates: GiftUpdateType[];
+  initialUpdates: GiftUpdateType[];
 }) {
   const { data: session } = useSession();
 
@@ -48,6 +48,7 @@ export default function GiftInformationModal({
     redirect("/login");
   }
 
+  const [updates, setUpdates] = useState(initialUpdates);
   const [errors, setErrors] = useState({} as updateSchemaCheck);
   const [displayForm, setDisplayForm] = useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -63,7 +64,7 @@ export default function GiftInformationModal({
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         backdrop="blur"
-        placement="top-center"
+        placement="center"
       >
         <ModalContent>
           {(onClose) => (
@@ -86,7 +87,7 @@ export default function GiftInformationModal({
                   if (result.success) {
                     await addGiftUpdate(gift, giftUpdate);
                     setDisplayForm(false);
-                    window.location.reload();
+                    setUpdates([...updates, { ...giftUpdate, _id: "" }]);
                     return;
                   }
 
@@ -103,7 +104,11 @@ export default function GiftInformationModal({
                     {gift.price} {gift.currency}
                   </GiftInfo>
                   <GiftInfo title="Paid Amount">
-                    {gift.paidAmount} {gift.currency}
+                    {updates.reduce(
+                      (acc, current) => acc + parseFloat(current.amount),
+                      0
+                    )}{" "}
+                    {gift.currency}
                   </GiftInfo>
 
                   <GiftInfo title="Created">
@@ -192,22 +197,6 @@ export default function GiftInformationModal({
                             </span>
                           </div>
                         }
-                        endContent={
-                          <div className="flex items-center">
-                            <label className="sr-only" htmlFor="currency">
-                              Currency
-                            </label>
-                            <select
-                              className="outline-none border-0 bg-transparent text-default-400 text-small"
-                              id="currency"
-                              name="currency"
-                            >
-                              <option>EUR</option>
-                              <option>USD</option>
-                              <option>ARS</option>
-                            </select>
-                          </div>
-                        }
                         type="number"
                       />
                       <Button
@@ -255,7 +244,7 @@ export default function GiftInformationModal({
 
 function GiftInfo({ title, children }: PropsWithChildren<{ title: string }>) {
   return (
-    <div className="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
+    <div className="md:grid md:grid-cols-2 hover:bg-foreground-100 md:space-y-0 space-y-1 p-4 border-b">
       <p className="text-secondary-400">{title}</p>
       <p>{children}</p>
     </div>

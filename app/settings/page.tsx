@@ -44,8 +44,6 @@ export default function Page() {
           <SideBarItem
             isActive={name === "account"}
             onClick={() => {
-              console.log("here");
-
               setName("account");
             }}
           >
@@ -54,7 +52,6 @@ export default function Page() {
           <SideBarItem
             isActive={name === "display"}
             onClick={() => {
-              console.log("here");
               setName("display");
             }}
           >

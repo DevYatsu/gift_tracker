@@ -54,7 +54,7 @@ export default function NewGiftButton() {
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         backdrop="blur"
-        placement="top-center"
+        placement="center"
       >
         <ModalContent>
           {(onClose) => (

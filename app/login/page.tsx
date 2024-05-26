@@ -6,7 +6,9 @@ import { signIn, useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 
 function GoogleImage() {
-  return <Image src={GoogleSvg} alt="" height="30" color="white"></Image>;
+  return (
+    <Image src={GoogleSvg} alt="Google Logo" height="30" color="white"></Image>
+  );
 }
 
 export default function LoginPage() {

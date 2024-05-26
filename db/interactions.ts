@@ -22,8 +22,6 @@ export async function getUpdatesCollection() {
 
 export async function getUpdatesFromIds(updatesIds: string[]) {
   const objectIds = updatesIds.map((id) => new ObjectId(id));
-  console.log(objectIds);
-
   const updatesCollection = await getUpdatesCollection();
 
   const updates = await Promise.all(
@@ -35,8 +33,6 @@ export async function getUpdatesFromIds(updatesIds: string[]) {
     )
   );
 
-  console.log(updates);
-
   return updates;
 }
 
@@ -45,9 +41,6 @@ export async function addNewGift(gift: GiftType) {
 
   if (typeof gift.price === "string") {
     dbGift.price = new Decimal128(gift.price);
-  }
-  if (typeof gift.paidAmount === "string") {
-    dbGift.paidAmount = new Decimal128(gift.price);
   }
 
   const session = await getServerSession(authOptions);
@@ -113,6 +106,16 @@ export async function deleteGift(giftId: string) {
   if (!session || !session.user || session.user.email !== gift.userEmail) {
     return { error: "unauthorized" };
   }
+
+  const giftUpdatesCollection = await getUpdatesCollection();
+
+  await Promise.all(
+    gift.updatesIds.map(async (stringId) => {
+      return await giftUpdatesCollection.deleteOne({
+        _id: new ObjectId(stringId),
+      });
+    })
+  );
 
   await giftsCollection.deleteOne({ _id: objectId });
 }
