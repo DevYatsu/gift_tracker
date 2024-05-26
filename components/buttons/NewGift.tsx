@@ -42,7 +42,6 @@ export default function NewGiftButton() {
   }
 
   const [errors, setErrors] = useState({} as giftSchemaCheck);
-
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (

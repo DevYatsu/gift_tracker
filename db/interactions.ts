@@ -2,7 +2,7 @@
 
 import { Decimal128, ObjectId, PushOperator } from "mongodb";
 import clientPromise from "./mongodb";
-import { DbGift, DbGiftUpdate, GiftType, GiftUpdateType } from "./schema";
+import { DbGift, DbGiftUpdate, GiftType } from "./schema";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 
@@ -46,7 +46,7 @@ export async function addNewGift(gift: GiftType) {
   const session = await getServerSession(authOptions);
 
   if (!session || !session.user || session.user.email !== dbGift.userEmail) {
-    return { error: "unauthorized" };
+    throw new Error("Unauthorized!");
   }
 
   const giftsCollection = await getGiftsCollection();
@@ -71,7 +71,7 @@ export async function addGiftUpdate(
   const session = await getServerSession(authOptions);
 
   if (!session || !session.user || session.user.email !== gift.userEmail) {
-    return { error: "unauthorized" };
+    throw new Error("Unauthorized!");
   }
 
   const giftsCollection = await getGiftsCollection();
@@ -98,13 +98,13 @@ export async function deleteGift(giftId: string) {
   })) as DbGift | null;
 
   if (!gift) {
-    return { error: "no gift found" };
+    throw new Error("No gift found!");
   }
 
   const session = await getServerSession(authOptions);
 
   if (!session || !session.user || session.user.email !== gift.userEmail) {
-    return { error: "unauthorized" };
+    throw new Error("Unauthorized!");
   }
 
   const giftUpdatesCollection = await getUpdatesCollection();
@@ -129,13 +129,13 @@ export async function updateGift(giftId: number, updateValue: Document) {
   })) as DbGift | null;
 
   if (!gift) {
-    return { error: "no gift found" };
+    throw new Error("No gift found!");
   }
 
   const session = await getServerSession(authOptions);
 
   if (!session || !session.user || session.user.email !== gift.userEmail) {
-    return { error: "unauthorized" };
+    throw new Error("Unauthorized!");
   }
 
   await giftsCollection.updateOne({ _id: objectId }, updateValue);
@@ -147,7 +147,7 @@ export async function findUserGifts(
   const session = await getServerSession(authOptions);
 
   if (!session || !session.user || session.user.email !== userEmail) {
-    return { error: "unauthorized" };
+    throw new Error("Unauthorized!");
   }
 
   const giftsCollection = await getGiftsCollection();
