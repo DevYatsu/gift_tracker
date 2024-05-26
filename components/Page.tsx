@@ -1,3 +1,4 @@
+import { PropsOf } from "@nextui-org/react";
 import React, { ComponentProps, PropsWithChildren } from "react";
 
 export default function PageTemplate({
@@ -31,9 +32,13 @@ export default function PageTemplate({
 export function SmOptions({
   children,
   initialOption,
-}: PropsWithChildren<{ initialOption: string }>) {
+  ...otherProps
+}: PropsWithChildren<{
+  initialOption: string;
+}> &
+  ComponentProps<"div">) {
   return (
-    <div className="relative my-4 w-56 sm:hidden">
+    <div className="relative my-4 w-56 sm:hidden" {...otherProps}>
       <input
         className="peer hidden"
         type="checkbox"
@@ -42,13 +47,13 @@ export function SmOptions({
       />
       <label
         htmlFor="select-1"
-        className="flex w-full cursor-pointer select-none rounded-lg border p-2 px-3 text-sm text-gray-700 ring-primary peer-checked:ring"
+        className="flex w-full cursor-pointer select-none rounded-lg border p-2 px-3 text-sm text-foreground-500 ring-primary peer-checked:ring"
       >
         {initialOption}
       </label>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        className="pointer-events-none absolute right-0 top-3 ml-auto mr-5 h-4 text-slate-700 transition peer-checked:rotate-180"
+        className="pointer-events-none absolute right-0 top-3 ml-auto mr-5 h-4 text-foreground-500 transition peer-checked:rotate-180"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
@@ -62,9 +67,15 @@ export function SmOptions({
     </div>
   );
 }
-export function SmOption({ children }: PropsWithChildren) {
+export function SmOption({
+  children,
+  ...otherProps
+}: PropsWithChildren & ComponentProps<"li">) {
   return (
-    <li className="cursor-pointer px-3 py-2 text-sm text-slate-600 hover:bg-primary hover:text-white">
+    <li
+      className="cursor-pointer px-3 py-2 text-sm text-foreground-500 hover:bg-primary hover:text-foreground-300"
+      {...otherProps}
+    >
       {children}
     </li>
   );

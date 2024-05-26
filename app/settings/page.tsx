@@ -7,12 +7,15 @@ import PageTemplate, {
   MainContent,
   SideBar,
   SideBarItem,
+  SmOption,
+  SmOptions,
   SubTitle,
 } from "@/components/Page";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import ThemeSwitcher from "@/components/Theme/ThemeSwitcher";
 import { useState } from "react";
+import LogOutButton from "@/components/buttons/LogOut";
 
 type UserType = {
   name?: string | null;
@@ -40,6 +43,13 @@ export default function Page() {
   return (
     <>
       <PageTemplate title="Settings">
+        <SmOptions initialOption={name}>
+          <SmOption
+            onClick={() => setName(name === "account" ? "display" : "account")}
+          >
+            {name === "account" ? "display" : "account"}
+          </SmOption>
+        </SmOptions>
         <SideBar>
           <SideBarItem
             isActive={name === "account"}
@@ -87,7 +97,7 @@ function AccountContent({ name, email, image }: UserType) {
       <UserProfile name={name} email={email} image={image} />
 
       <ContentLineBreak />
-
+      <LogOutButton />
       <SubTitle>More coming soon...</SubTitle>
     </>
   );
